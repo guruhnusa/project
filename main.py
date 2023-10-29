@@ -1,18 +1,30 @@
 import tkinter as tk
 from tkinter import Label, Frame, Button
-from model import Movie  # Import model Movie dari file model.py
-import json
-import os  # Modul untuk mengelola sistem file
+import os
 import requests
 from PIL import Image, ImageTk
+from model import Movie  # Import model Movie dari file model.py
+import json
+
+# Membaca data film dari file JSON
+with open('movie_data.json', 'r') as json_file:
+    json_data = json.load(json_file)
+
+# List untuk menyimpan objek Movie
+movie_data = []
+
+# Konversi data JSON ke objek Movie
+for data in json_data:
+    movie = Movie(
+        title=data['title'],
+        duration=data['duration'],
+        poster_path=data['poster_path'],
+    )
+    movie_data.append(movie)
 
 # Membuat folder "images" jika belum ada
 if not os.path.exists("images"):
     os.makedirs("images")
-
-# Baca data film dari file JSON
-with open('movie_data.json', 'r') as json_file:
-    movie_list = json.load(json_file)
 
 def order_ticket(movie_title):
     # Tambahkan logika untuk memesan tiket di sini
@@ -26,13 +38,13 @@ def display_movie_details(movie_data):
         # Membuat frame untuk setiap film
         frame = Frame(root)
         frame.grid(row=0, column=idx, padx=10, pady=10, sticky="w")
-
+        
         # URL gambar poster
-        poster_url = movie_info['poster_path']
+        poster_url = movie_info.poster_path
 
         # Unduh gambar poster
         poster_response = requests.get(poster_url)
-        poster_filename = f"images/{movie_info['title'].replace(' ', '_')}_poster.jpg"  # Simpan gambar dalam folder "images"
+        poster_filename = f"images/{movie_info.title.replace(' ', '_')}_poster.jpg"  # Simpan gambar dalam folder "images"
         with open(poster_filename, "wb") as poster_file:
             poster_file.write(poster_response.content)
 
@@ -49,18 +61,18 @@ def display_movie_details(movie_data):
         poster_label.grid(row=0, column=0, padx=10)
 
         # Judul
-        title_label = Label(frame, text=f"Judul: {movie_info['title']}")
+        title_label = Label(frame, text=f"Judul: {movie_info.title}")
         title_label.grid(row=1, column=0, sticky="w")
 
         # Durasi
-        duration_label = Label(frame, text=f"Durasi: {movie_info['duration']} menit")
+        duration_label = Label(frame, text=f"Durasi: {movie_info.duration} menit")
         duration_label.grid(row=2, column=0, sticky="w")
 
         # Tombol "Order Ticket"
-        order_button = Button(frame, text="Order Ticket", command=lambda title=movie_info['title']: order_ticket(title))
+        order_button = Button(frame, text="Order Ticket", command=lambda title=movie_info.title: order_ticket(title))
         order_button.grid(row=3, column=0, pady=5)
 
     root.mainloop()
 
 # Menampilkan detail film menggunakan Tkinter
-display_movie_details(movie_list)
+display_movie_details(movie_data)
