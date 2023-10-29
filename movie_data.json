@@ -1,18 +1,35 @@
 [
     {
-    "title": "MOHON DOA RESTU",
-    "duration": 106,
-    "poster_path": "https://web3.21cineplex.com/movie-images/13MDRU.jpg"
-},
-{
-    "title": "TAYLOR SWIFT: THE ERAS TOUR",
-    "duration": 165,
-    "poster_path": "https://web3.21cineplex.com/movie-images/23TSET.jpg"
-},
-{
-    "title": "SARANJANA: KOTA GHAIB",
-    "duration": 98,
-    "poster_path": "https://web3.21cineplex.com/movie-images/13SKGB.jpg"
-}
-
+        "title": "MOHON DOA RESTU",
+        "duration": 106,
+        "poster_path": "https://web3.21cineplex.com/movie-images/13MDRU.jpg",
+        "available_seats": ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10",
+                            "B1", "B3","B2", "B4", "B5", "B6", "B7", "B8", "B9", "B10",
+                            "C1", "C2", "C3","C4", "C5", "C6", "C7", "C8", "C9", "C10",
+                            "D1", "D2", "D3", "D4", "D5", "D6", "D7", "D8", "D9", "D10",
+                            "E1", "E2", "E3", "E4", "E5", "E6", "E7", "E8", "E9", "E10"],
+        "booked_seats": ["A3", "B5", "C7"]
+    },
+    {
+        "title": "TAYLOR SWIFT: THE ERAS TOUR",
+        "duration": 165,
+        "poster_path": "https://web3.21cineplex.com/movie-images/23TSET.jpg",
+        "available_seats": ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10",
+                            "B1", "B3","B2", "B4", "B5", "B6", "B7", "B8", "B9", "B10",
+                            "C1", "C2", "C3","C4", "C5", "C6", "C7", "C8", "C9", "C10",
+                            "D1", "D2", "D3", "D4", "D5", "D6", "D7", "D8", "D9", "D10",
+                            "E1", "E2", "E3", "E4", "E5", "E6", "E7", "E8", "E9", "E10"],
+        "booked_seats": ["A2", "B4", "C6", "D8"]
+    },
+    {
+        "title": "SARANJANA: KOTA GHAIB",
+        "duration": 98,
+        "poster_path": "https://web3.21cineplex.com/movie-images/13SKGB.jpg",
+        "available_seats": ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10",
+                            "B1", "B3","B2", "B4", "B5", "B6", "B7", "B8", "B9", "B10",
+                            "C1", "C2", "C3","C4", "C5", "C6", "C7", "C8", "C9", "C10",
+                            "D1", "D2", "D3", "D4", "D5", "D6", "D7", "D8", "D9", "D10",
+                            "E1", "E2", "E3", "E4", "E5", "E6", "E7", "E8", "E9", "E10"],
+        "booked_seats": ["B2", "C4"]
+    }
 ]

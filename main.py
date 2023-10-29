@@ -19,6 +19,8 @@ for data in json_data:
         title=data['title'],
         duration=data['duration'],
         poster_path=data['poster_path'],
+        available_seats=data['available_seats'],
+        booked_seats=data['booked_seats'],
     )
     movie_data.append(movie)
 
@@ -26,9 +28,29 @@ for data in json_data:
 if not os.path.exists("images"):
     os.makedirs("images")
 
-def order_ticket(movie_title):
-    # Tambahkan logika untuk memesan tiket di sini
-    print(f"Anda memesan tiket untuk film: {movie_title}")
+def order_ticket(movie_info):
+    root = tk.Tk()
+    root.title(f"Available Seats for {movie_info.title}")
+
+    available_seats = movie_info.available_seats
+    
+    seat_label = tk.Label(root, text="Available Seats:")
+    seat_label.pack()
+
+    # Create a frame to hold the seat labels
+    seat_frame = tk.Frame(root)
+    seat_frame.pack()
+
+    rows = ["A", "B", "C", "D", "E"]  # Define the rows
+
+    for idx, row in enumerate(rows):
+        for seat_num in range(1, 11):
+            seat = f"{row}{seat_num}"  # Format seat as "A1", "A2", ... "E10"
+            seat_label = tk.Label(seat_frame, text=seat, borderwidth=2, relief="solid", padx=10, pady=5)
+            seat_label.grid(row=idx, column=seat_num + 1, padx=5, pady=10)
+
+    root.mainloop()
+
 
 def display_movie_details(movie_data):
     root = tk.Tk()
@@ -67,9 +89,10 @@ def display_movie_details(movie_data):
         # Durasi
         duration_label = Label(frame, text=f"Durasi: {movie_info.duration} menit")
         duration_label.grid(row=2, column=0, sticky="w")
+        
 
         # Tombol "Order Ticket"
-        order_button = Button(frame, text="Order Ticket", command=lambda title=movie_info.title: order_ticket(title))
+        order_button = Button(frame, text="Order Ticket", command=lambda movie_info=movie_info: order_ticket(movie_info))
         order_button.grid(row=3, column=0, pady=5)
 
     root.mainloop()
