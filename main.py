@@ -21,6 +21,7 @@ for data in json_data:
         poster_path=data['poster_path'],
         available_seats=data['available_seats'],
         booked_seats=data['booked_seats'],
+        price=data['price'],
     )
     movie_data.append(movie)
 
@@ -31,9 +32,33 @@ if not os.path.exists("images"):
 def order_ticket(movie_info):
     root = tk.Tk()
     root.title(f"Available Seats for {movie_info.title}")
+    root.geometry("600x400")
 
     available_seats = movie_info.available_seats
-    
+    booked_seats = movie_info.booked_seats
+
+    selected_seats = set()  # Store selected seats in a set
+
+    def seat_click(seat, label):
+        if seat not in booked_seats:
+            if label.cget("bg") == "green":
+                # If the seat is already highlighted (green), unhighlight it by restoring the default background color
+                label.configure(bg=label.master.cget("bg"))  # Use the background color of the parent frame
+                status_label.config(text="Selected Seat: None")
+                selected_seats.discard(seat)  # Remove the seat from the selected seats
+            else:
+                # Highlight the seat by changing the background color to green
+                label.configure(bg="green")
+                status_label.config(text=f"Selected Seat: {seat} (Available)")
+                selected_seats.add(seat)  # Add the seat to the selected seats
+        else:
+            status_label.config(text=f"Selected Seat: {seat} (Not Available)")
+
+    def order_selected_seats():
+        if selected_seats:
+            status_label.config(text=f"Ordered Seats: {', '.join(selected_seats)}")
+            # Perform the ordering action here with the selected seats
+
     seat_label = tk.Label(root, text="Available Seats:")
     seat_label.pack()
 
@@ -41,13 +66,32 @@ def order_ticket(movie_info):
     seat_frame = tk.Frame(root)
     seat_frame.pack()
 
-    rows = ["A", "B", "C", "D", "E"]  # Define the rows
+    rows = ["A", "B", "C", "D", "E"]
 
-    for idx, row in enumerate(rows):
+    # Dictionary to store references to seat labels
+    seat_labels = {}
+
+    for row in rows:
         for seat_num in range(1, 11):
-            seat = f"{row}{seat_num}"  # Format seat as "A1", "A2", ... "E10"
-            seat_label = tk.Label(seat_frame, text=seat, borderwidth=2, relief="solid", padx=10, pady=5)
-            seat_label.grid(row=idx, column=seat_num + 1, padx=5, pady=10)
+            seat = f"{row}{seat_num}"
+            if seat in available_seats:
+                label = tk.Label(seat_frame, text=seat, borderwidth=2, relief="solid", padx=10, pady=5, cursor="hand2")
+                if seat in booked_seats:
+                    label.configure(bg="red", fg="white")
+                else:
+                    label.bind("<Button-1>", lambda event, seat=seat, label=label: seat_click(seat, label))
+                label.grid(row=ord(row) - ord('A'), column=seat_num - 1, padx=5, pady=5)
+                seat_labels[seat] = label
+            else:
+                label = tk.Label(seat_frame, text="", padx=10, pady=5)  # Empty label for unavailable seats
+                label.grid(row=ord(row) - ord('A'), column=seat_num - 1, padx=5, pady=5)
+                seat_labels[seat] = label
+
+    status_label = tk.Label(root, text="Selected Seat: None")
+    status_label.pack()
+
+    order_button = tk.Button(root, text="Order Selected Seats", command=order_selected_seats)
+    order_button.pack()
 
     root.mainloop()
 
@@ -90,10 +134,13 @@ def display_movie_details(movie_data):
         duration_label = Label(frame, text=f"Durasi: {movie_info.duration} menit")
         duration_label.grid(row=2, column=0, sticky="w")
         
+        duration_label = Label(frame, text=f"Harga: {movie_info.price} Rupiah")
+        duration_label.grid(row=3, column=0, sticky="w")
+        
 
         # Tombol "Order Ticket"
         order_button = Button(frame, text="Order Ticket", command=lambda movie_info=movie_info: order_ticket(movie_info))
-        order_button.grid(row=3, column=0, pady=5)
+        order_button.grid(row=4, column=0, pady=5)
 
     root.mainloop()
 
