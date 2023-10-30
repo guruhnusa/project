@@ -44,13 +44,14 @@ def order_ticket(movie_info):
             if label.cget("bg") == "green":
                 # If the seat is already highlighted (green), unhighlight it by restoring the default background color
                 label.configure(bg=label.master.cget("bg"))  # Use the background color of the parent frame
-                status_label.config(text="Selected Seat: None")
+                # status_label.config(text="Selected Seats: None")
                 selected_seats.discard(seat)  # Remove the seat from the selected seats
+                status_label.config(text=f"Selected Seats: {', '.join(selected_seats)} (Available)")
             else:
                 # Highlight the seat by changing the background color to green
                 label.configure(bg="green")
-                status_label.config(text=f"Selected Seat: {seat} (Available)")
                 selected_seats.add(seat)  # Add the seat to the selected seats
+                status_label.config(text=f"Selected Seats: {', '.join(selected_seats)} (Available)")
         else:
             status_label.config(text=f"Selected Seat: {seat} (Not Available)")
 
@@ -58,8 +59,9 @@ def order_ticket(movie_info):
         if selected_seats:
             total_price = 0
             for seat in selected_seats:
-                # Hitung harga berdasarkan kursi yang dipilih (misalnya, 10000 per kursi)
-                total_price += movie_info.price  # Gantilah ini dengan formula harga yang sesuai
+                if seat not in booked_seats:
+                    # Hitung harga berdasarkan kursi yang dipilih (misalnya, 10000 per kursi)
+                    total_price += movie_info.price  # Gantilah ini dengan formula harga yang sesuai
 
             # Buat tampilan check-out baru
             checkout_window = tk.Toplevel()
@@ -69,19 +71,22 @@ def order_ticket(movie_info):
             # Tampilkan informasi pesanan
             movie_title_label = Label(checkout_window, text=f"Film: {movie_info.title}")
             movie_title_label.pack()
-        
-        selected_seats_label = Label(checkout_window, text=f"Kursi yang Dipilih: {', '.join(selected_seats)}")
-        selected_seats_label.pack()
-        
-        total_price_label = Label(checkout_window, text=f"Total Harga: Rp {total_price}00")
-        total_price_label.pack()
 
-        # Tombol "Confirm Order"
-        confirm_button = Button(checkout_window, text="Confirm Order", command=checkout_window.destroy)
-        confirm_button.pack()
+            selected_seats_label = Label(checkout_window, text=f"Kursi yang Dipilih: {', '.join(selected_seats)}")
+            selected_seats_label.pack()
 
-        # Tutup jendela check-out setelah selesai
-        checkout_window.mainloop()
+            total_price_label = Label(checkout_window, text=f"Total Harga: Rp {total_price}00")
+            total_price_label.pack()
+
+            # Tombol "Confirm Order"
+            confirm_button = Button(checkout_window, text="Confirm Order", command=checkout_window.destroy)
+            confirm_button.pack()
+
+            # Tutup jendela check-out setelah selesai
+            checkout_window.mainloop()
+        else:
+            status_label.config(text="No seats selected. Please select at least one seat to order.")
+
 
     seat_label = tk.Label(root, text="Available Seats:")
     seat_label.pack()
