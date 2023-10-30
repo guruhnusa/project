@@ -44,7 +44,6 @@ def order_ticket(movie_info):
             if label.cget("bg") == "green":
                 # If the seat is already highlighted (green), unhighlight it by restoring the default background color
                 label.configure(bg=label.master.cget("bg"))  # Use the background color of the parent frame
-                # status_label.config(text="Selected Seats: None")
                 selected_seats.discard(seat)  # Remove the seat from the selected seats
                 status_label.config(text=f"Selected Seats: {', '.join(selected_seats)} (Available)")
             else:
